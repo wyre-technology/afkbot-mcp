@@ -1,0 +1,68 @@
+{
+  "manifest_version": "0.3",
+  "name": "afkbot-mcp",
+  "version": "1.0.0",
+  "display_name": "AFKBot MCP Server",
+  "description": "MCP server for AFKBot PTO management — file time-off requests from any MCP client",
+  "long_description": "Wraps the AFKBot PTO management REST API as MCP tools. Create, list, cancel PTO requests and view team calendars through any MCP-compatible AI assistant. AFKBot orchestrates across Float, Outlook Calendar, Autotask, and Rootly.",
+  "author": {
+    "name": "Aaron Sachs",
+    "url": "https://github.com/asachs01"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wyre-technology/afkbot-mcp"
+  },
+  "homepage": "https://github.com/wyre-technology/afkbot-mcp",
+  "license": "MIT",
+  "keywords": ["mcp", "mcp-server", "pto", "afkbot", "azure", "time-off"],
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/dist/index.js"],
+      "env": {
+        "AZURE_TENANT_ID": "${user_config.azure_tenant_id}",
+        "AZURE_CLIENT_ID": "${user_config.azure_client_id}",
+        "AZURE_CLIENT_SECRET": "${user_config.azure_client_secret}",
+        "AFKBOT_API_URL": "${user_config.afkbot_api_url}",
+        "MCP_TRANSPORT": "stdio"
+      }
+    }
+  },
+  "user_config": {
+    "azure_tenant_id": {
+      "type": "string",
+      "title": "Azure Tenant ID",
+      "description": "Azure AD tenant ID",
+      "required": true
+    },
+    "azure_client_id": {
+      "type": "string",
+      "title": "Azure Client ID",
+      "description": "App registration client ID for the MCP server",
+      "required": true,
+      "sensitive": true
+    },
+    "azure_client_secret": {
+      "type": "string",
+      "title": "Azure Client Secret",
+      "description": "App registration client secret",
+      "required": true,
+      "sensitive": true
+    },
+    "afkbot_api_url": {
+      "type": "string",
+      "title": "AFKBot API URL",
+      "description": "AFKBot API base URL (defaults to production)",
+      "required": false
+    }
+  },
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": {
+      "node": ">=20.0.0"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+services:
+  afkbot-mcp:
+    build: .
+    environment:
+      - AZURE_TENANT_ID=${AZURE_TENANT_ID}
+      - AZURE_CLIENT_ID=${AZURE_CLIENT_ID}
+      - AZURE_CLIENT_SECRET=${AZURE_CLIENT_SECRET}
+      - AFKBOT_API_URL=${AFKBOT_API_URL:-https://ca-afkbot-prod.wittyhill-c84871ea.eastus2.azurecontainerapps.io}
+    stdin_open: true
