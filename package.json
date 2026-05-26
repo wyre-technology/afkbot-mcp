@@ -37,12 +37,12 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.0",
-    "@azure/identity": "^4.0.0",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@azure/identity": "^4.13.1",
     "@azure/msal-node": "^2.0.0"
   },
   "devDependencies": {
-    "tsx": "^4.0.0",
+    "tsx": "^4.22.3",
     "typescript": "^5.5.0",
     "@types/node": "^22.0.0"
   },
