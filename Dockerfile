@@ -1,5 +1,5 @@
 # Multi-stage build
-FROM node:22-alpine AS builder
+FROM node:26-alpine AS builder
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM node:22-alpine AS production
+FROM node:26-alpine AS production
 
 RUN addgroup -g 1001 -S appuser && \
     adduser -S appuser -u 1001 -G appuser
