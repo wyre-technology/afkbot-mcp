@@ -1,10 +1,15 @@
 import { getAccessToken } from "../auth/azureAuth.js";
+import { cleanEnv } from "../config/env.js";
 
-const DEFAULT_API_URL =
+export const DEFAULT_API_URL =
   "https://ca-afkbot-prod.wittyhill-c84871ea.eastus2.azurecontainerapps.io";
 
-function getBaseUrl(): string {
-  return process.env.AFKBOT_API_URL || DEFAULT_API_URL;
+// Resolve the API base URL, ignoring empty/whitespace/placeholder values so a
+// blank optional `afkbot_api_url` field never overrides the working default.
+// A truthy but unresolved `${user_config.afkbot_api_url}` placeholder has no URL
+// scheme, so passing it through would make every tool throw "Invalid URL".
+export function getBaseUrl(): string {
+  return cleanEnv(process.env.AFKBOT_API_URL) ?? DEFAULT_API_URL;
 }
 
 async function authHeaders(): Promise<Record<string, string>> {

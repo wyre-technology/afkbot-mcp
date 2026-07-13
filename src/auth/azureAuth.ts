@@ -1,13 +1,17 @@
 import { ConfidentialClientApplication } from "@azure/msal-node";
+import { cleanEnv } from "../config/env.js";
 
 let msalClient: ConfidentialClientApplication | null = null;
 let cachedToken: { token: string; expiresAt: number } | null = null;
 
 function getMsalClient(): ConfidentialClientApplication {
   if (!msalClient) {
-    const tenantId = process.env.AZURE_TENANT_ID;
-    const clientId = process.env.AZURE_CLIENT_ID;
-    const clientSecret = process.env.AZURE_CLIENT_SECRET;
+    // cleanEnv() drops empty/whitespace/unresolved-placeholder values so the
+    // check below reports them as missing (a clear error) instead of handing a
+    // literal `${user_config.*}` to MSAL as if it were a real credential.
+    const tenantId = cleanEnv(process.env.AZURE_TENANT_ID);
+    const clientId = cleanEnv(process.env.AZURE_CLIENT_ID);
+    const clientSecret = cleanEnv(process.env.AZURE_CLIENT_SECRET);
 
     if (!tenantId || !clientId || !clientSecret) {
       throw new Error(
@@ -37,7 +41,8 @@ export async function getAccessToken(): Promise<string> {
   }
 
   const afkbotClientId =
-    process.env.AFKBOT_APP_CLIENT_ID || "17963178-bee5-4738-82a3-088e739bb95b";
+    cleanEnv(process.env.AFKBOT_APP_CLIENT_ID) ??
+    "17963178-bee5-4738-82a3-088e739bb95b";
 
   const client = getMsalClient();
   const result = await client.acquireTokenByClientCredential({
