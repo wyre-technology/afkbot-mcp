@@ -30,7 +30,24 @@ jobs:
 
   deploy:
     needs: release
-    if: needs.release.outputs.released == 'true'
+    # afkbot-mcp is Aaron's internal PTO-bot tool, not a public MCP-registry
+    # vendor connector -- server.json was deliberately added then reverted
+    # same-day on 2026-04-29 (PR #2 -> revert PR #3), and Aaron's 2026-08-19
+    # decision (batch 3, item 5) confirmed that revert stands: REMOVE the
+    # registry-publish step's ability to gate deploy, do not add server.json
+    # back. The reusable release.yml has no per-repo opt-out for its
+    # mcp-registry sub-job, so it fails here on the missing server.json,
+    # which marks the whole `release:` call above "failure" from this
+    # caller's point of view -- gating deploy on plain job success would
+    # skip a real, working deploy every single release. `always()` bypasses
+    # that specific expected failure; the `digest != ''` check keeps this
+    # job from running on a GENUINE upstream failure (e.g. the docker job
+    # itself breaking), since digest is only ever populated once an image
+    # has actually been built and pushed.
+    if: >
+      always() &&
+      needs.release.outputs.released == 'true' &&
+      needs.release.outputs.digest != ''
     permissions:
       id-token: write
       contents: read
