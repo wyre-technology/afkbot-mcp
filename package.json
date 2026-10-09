@@ -15,7 +15,9 @@
     "lint": "tsc --noEmit",
     "clean": "rm -rf dist",
     "prepare": "npm run build",
-    "prebuild": "npm run clean"
+    "prebuild": "npm run clean",
+    "pack:mcpb": "node scripts/pack-mcpb.js",
+    "validate:mcpb": "mcpb validate manifest.json"
   },
   "keywords": [
     "mcp",
